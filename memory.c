@@ -46,7 +46,7 @@ void CPUset_func_valid_addr(int (*func)(CPUaddr, CPUlong))
   memory.valid_addr = func;
 }
 
-void CPUset_func_handle_exception(void (*func)(void))
+void CPUset_func_handle_exception(void (*func)(int, CPUaddr))
 {
   memory.handle_exception = func;
 }

@@ -140,8 +140,10 @@ static void build_cpufunctbl (void)
 
 	if (table68k[opcode].handler != -1) {
 	    f = cpufunctbl[cft_map (table68k[opcode].handler)];
+#if 0
 	    if (f == op_illg_1)
 		abort();
+#endif
 	    cpufunctbl[cft_map (opcode)] = f;
 	}
     }
@@ -756,7 +758,7 @@ kludge_me_do:
 
     /* Unsure how to deal with this in a nice way */
 
-    handle_exception();
+    handle_exception(nr, oldpc);
 
     fill_prefetch_0 ();
     regs.t1 = regs.t0 = regs.m = 0;
@@ -1274,8 +1276,10 @@ static void m68k_run_1 (void)
 {
     for (;;) {
 	int cycles;
-	uae_u32 opcode = GET_OPCODE;
+	uae_u32 opcode;
+	opcode = GET_OPCODE;
 #if 0
+	fprintf(stderr, "executing opcode: %04x\n", opcode);
 	if (get_ilong (0) != do_get_mem_long (&regs.prefetch)) {
 	    debugging = 1;
 	    return;
@@ -1289,14 +1293,8 @@ static void m68k_run_1 (void)
 #elif COUNT_INSTRS == 1
 	instrcount[opcode]++;
 #endif
-#if defined(X86_ASSEMBLY)
-	__asm__ __volatile__("\tcall *%%ebx"
-			     : "=&a" (cycles) : "b" (cpufunctbl[opcode]), "0" (opcode)
-			     : "%edx", "%ecx",
-			     "%esi", "%edi", "%ebp", "memory", "cc");
-#else
 	cycles = (*cpufunctbl[opcode])(opcode);
-#endif
+
 	/*n_insns++;*/
 	cycles &= cycles_mask;
 	cycles |= cycles_val;
@@ -1340,8 +1338,8 @@ void m68k_go (int may_quit)
 	    if (quit_program == 1)
 		break;
 	    quit_program = 0;
-	    m68k_reset ();
 #if 0
+	    m68k_reset ();
 	    reset_all_systems ();
 	    customreset ();
 #endif

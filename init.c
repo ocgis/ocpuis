@@ -53,47 +53,53 @@ int CPUinit(CPU *data)
   }
   CPUset_func_get_byte(data->get_byte);
 
-  if(!data->get_byte) {
+  if(!data->get_word) {
     free(data);
     return -2;
   }
   CPUset_func_get_word(data->get_word);
 
-  if(!data->get_byte) {
+  if(!data->get_long) {
     free(data);
     return -3;
   }
   CPUset_func_get_long(data->get_long);
 
-  if(!data->get_byte) {
+  if(!data->put_byte) {
     free(data);
     return -4;
   }
   CPUset_func_put_byte(data->put_byte);
 
-  if(!data->get_byte) {
+  if(!data->put_word) {
     free(data);
     return -5;
   }
   CPUset_func_put_word(data->put_word);
 
-  if(!data->get_byte) {
+  if(!data->put_long) {
     free(data);
     return -6;
   }
   CPUset_func_put_long(data->put_long);
 
-  if(!data->get_byte) {
+  if(!data->real_addr) {
     free(data);
     return -7;
   }
   CPUset_func_real_addr(data->real_addr);
 
-  if(!data->get_byte) {
+  if(!data->valid_addr) {
     free(data);
     return -8;
   }
   CPUset_func_valid_addr(data->valid_addr);
+  
+  if(!data->handle_exception) {
+    free(data);
+    return -9;
+  }
+  CPUset_func_handle_exception(data->handle_exception);
   
   CPUset_pc(data->init_pc);
   CPUset_msp(data->init_msp);
@@ -108,7 +114,7 @@ int CPUinit(CPU *data)
 
 int CPUrun(void)
 {
-  m68k_go(0);
+  m68k_go(1);
 }
 
 void CPUset_pc(CPUaddr pc)

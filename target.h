@@ -16,4 +16,6 @@
 
 #define PICASSO96_SUPPORTED
 
+#if 0
 #define write_log write_log_standard
+#endif

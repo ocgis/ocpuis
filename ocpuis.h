@@ -33,7 +33,7 @@ typedef struct sCPU {
 
   /* Exception handling */
 
-  void (*handle_exception) (void);
+  void (*handle_exception) (int nr, CPUaddr oldpc);
 
 } CPU;
 
