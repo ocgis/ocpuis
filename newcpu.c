@@ -753,6 +753,11 @@ kludge_me_do:
     m68k_areg(regs, 7) -= 2;
     put_word (m68k_areg(regs, 7), regs.sr);
     m68k_setpc (get_long (regs.vbr + 4*nr));
+
+    /* Unsure how to deal with this in a nice way */
+
+    handle_exception();
+
     fill_prefetch_0 ();
     regs.t1 = regs.t0 = regs.m = 0;
     regs.spcflags &= ~(SPCFLAG_TRACE | SPCFLAG_DOTRACE);

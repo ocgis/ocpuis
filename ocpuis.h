@@ -40,6 +40,7 @@ typedef struct sCPU {
 /* Regular functions */
 
 CPU *CPUtemplate(void);
+CPU *CPUsimple_template(CPUaddr pc, CPUaddr sp, CPUword sr);
 int CPUinit(CPU *data);
 int CPUrun(void);
 
