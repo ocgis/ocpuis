@@ -96,6 +96,17 @@ int CPUrun(void);
 
 int CPUsubroutine(CPUaddr new_pc);
 
+/*
+ * CPUexception
+ *
+ * Perform an exception by
+ * jumping to an vector nr,
+ * without going to the user-
+ * level exception handler.
+ */
+
+int CPUexception(int nr);
+
 /* Retrieving and setting special data */
 
 CPUaddr CPUget_pc(void);

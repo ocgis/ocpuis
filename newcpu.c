@@ -1404,6 +1404,46 @@ CPUsubroutine(CPUaddr new_pc)
 }
 
 
+/*
+** Description
+** Perform an exception.
+**
+** Specify the exception number,
+** and it will run until an RTE
+** occurs.
+**
+** Note: This will not work for
+** things like Bus Error and
+** Address Error, because the
+** stack isn't created properly
+** for those.
+*/
+int
+CPUexception(int nr)
+{
+  uaecptr old_pc = m68k_getpc();
+
+  m68k_areg(regs, 7) -= 4;
+  put_long (m68k_areg(regs, 7), old_pc);
+  m68k_areg(regs, 7) -= 2;
+  put_word (m68k_areg(regs, 7), regs.sr);
+
+  m68k_setpc (get_long (regs.vbr + 4*nr));
+
+  while(old_pc != m68k_getpc())
+  {
+    if(quit_program > 0)
+    {
+      break;
+    }
+    execute_one_instruction();
+  }
+
+  m68k_setpc(old_pc);
+
+  return 0;
+}
+
 static void m68k_verify (uaecptr addr, uaecptr *nextpc)
 {
     uae_u32 opcode, val;
