@@ -76,6 +76,7 @@ CPU *CPUsimple_template(CPUaddr pc, CPUaddr sp, CPUword sr);
  * Initialises the CPU core, in a very non-reentrant manner.
  * Fills the internal structures with the values specified
  * in the CPU struct.
+ */
 
 int CPUinit(CPU *data);
 
@@ -83,8 +84,17 @@ int CPUinit(CPU *data);
  * CPUrun:
  *
  * Begin execution.
+ */
 
 int CPUrun(void);
+
+/*
+ * CPUsubroutine
+ *
+ * Execute subroutine.
+ */
+
+int CPUsubroutine(CPUaddr new_pc);
 
 /* Retrieving and setting special data */
 

@@ -1361,6 +1361,34 @@ void m68k_go (int may_quit)
     in_m68k_go--;
 }
 
+
+/*
+** Description
+** Execute a subroutine.
+*/
+int
+CPUsubroutine(CPUaddr new_pc)
+{
+  uaecptr old_pc = m68k_getpc();
+
+  m68k_do_jsr(old_pc, new_pc);
+
+  while(old_pc != m68k_getpc())
+  {
+    if(quit_program > 0)
+    {
+      break;
+    }
+    
+    m68k_run1();
+  }
+
+  m68k_setpc(old_pc);
+
+  return 0;
+}
+
+
 static void m68k_verify (uaecptr addr, uaecptr *nextpc)
 {
     uae_u32 opcode, val;
