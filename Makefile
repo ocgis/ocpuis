@@ -14,11 +14,17 @@ COREOBJS = cpuemu1.o cpuemu2.o cpuemu3.o cpuemu4.o cpuemu5.o cpuemu6.o cpuemu7.o
 CFLAGS=-g
 LDFLAGS=
 LIBNAME=libocpuis
+STLIBNAME=$(LIBNAME).a
+HEADER=ocpuis.h
 
-all: $(LIBNAME).a
+all: $(STLIBNAME)
+
+install: $(STLIBNAME) $(HEADER)
+	cp $(STLIBNAME) /usr/local/lib
+	cp $(HEADER) /usr/local/include
 
 clean:
-	-rm -f $(OBJS) *~ *.o main build68k gencpu $(LIBNAME).a
+	-rm -f $(OBJS) *~ *.o main build68k gencpu $(STLIBNAME)
 	-rm -f $(CORESRCS) cpustbl.c cputbl.h cpudefs.c
 
 build68k: build68k.o
@@ -57,5 +63,6 @@ init.o: ocpuis.h
 main: main.o $(OBJS) $(COREOBJS)
 	$(CC) $(CFLAGS) -o $@ main.o $(OBJS) $(COREOBJS) $(LIBS)
 
-$(LIBNAME).a: $(OBJS) $(COREOBJS)
-	$(AR) $(ARFLAGS) $(LIBNAME).a $(OBJS) $(COREOBJS)
+$(STLIBNAME): $(OBJS) $(COREOBJS)
+	$(AR) $(ARFLAGS) $(STLIBNAME) $(OBJS) $(COREOBJS)
+
