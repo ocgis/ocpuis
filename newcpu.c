@@ -135,7 +135,7 @@ static void build_cpufunctbl (void)
     for (opcode = 0; opcode < 65536; opcode++) {
 	cpuop_func *f;
 
-	if (table68k[opcode].mnemo == i_ILLG || table68k[opcode].clev > 3) /* FIXME!! */
+	if (table68k[opcode].mnemo == i_ILLG || table68k[opcode].clev > 0) /* FIXME!! */
 	    continue;
 
 	if (table68k[opcode].handler != -1) {
@@ -651,7 +651,7 @@ void MakeFromSR (void)
     SET_ZFLG ((regs.sr >> 2) & 1);
     SET_VFLG ((regs.sr >> 1) & 1);
     SET_CFLG (regs.sr & 1);
-    if (3 >= 2) { /* FIXME!! */
+    if (0 >= 2) { /* FIXME!! */
 	if (olds != regs.s) {
 	    if (olds) {
 		if (oldm)
@@ -697,13 +697,14 @@ void Exception(int nr, uaecptr oldpc)
     MakeSR();
     if (!regs.s) {
 	regs.usp = m68k_areg(regs, 7);
-	if (3 >= 2) /* FIXME!! */
+	if (0 >= 2) /* FIXME!! */
 	    m68k_areg(regs, 7) = regs.m ? regs.msp : regs.isp;
 	else
 	    m68k_areg(regs, 7) = regs.isp;
 	regs.s = 1;
     }
-    if (3 > 0) { /* FIXME!! */
+
+    if (0 > 0) { /* FIXME!! */
 	if (nr == 2 || nr == 3) {
 	    int i;
 	    /* @@@ this is probably wrong (?) */
@@ -754,11 +755,15 @@ void Exception(int nr, uaecptr oldpc)
 kludge_me_do:
     m68k_areg(regs, 7) -= 2;
     put_word (m68k_areg(regs, 7), regs.sr);
-    m68k_setpc (get_long (regs.vbr + 4*nr));
 
+#if 0
+    m68k_setpc (get_long (regs.vbr + 4*nr));
+#endif
     /* Unsure how to deal with this in a nice way */
 
     handle_exception(nr, oldpc);
+
+    
 
     fill_prefetch_0 ();
     regs.t1 = regs.t0 = regs.m = 0;
@@ -1279,7 +1284,7 @@ static void m68k_run_1 (void)
 	uae_u32 opcode;
 	opcode = GET_OPCODE;
 #if 0
-	fprintf(stderr, "executing opcode: %04x\n", opcode);
+	fprintf(stderr, "executing opcode: %04x at 0x%08x\n", opcode, m68k_getpc());
 	if (get_ilong (0) != do_get_mem_long (&regs.prefetch)) {
 	    debugging = 1;
 	    return;
