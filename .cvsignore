@@ -1,4 +1,7 @@
+*.la
+*.lo
 .deps
+.libs
 Makefile
 Makefile.in
 aclocal.m4
@@ -13,4 +16,5 @@ cpuemu[1-8].c
 cpustbl.c
 cputbl.h
 gencpu
+libtool
 sampleprog
