@@ -1,8 +1,8 @@
-lib_LIBRARIES = libocpuis.a
+lib_LTLIBRARIES = libocpuis.la
 
 CORESRCS = cpuemu1.c cpuemu2.c cpuemu3.c cpuemu4.c cpuemu5.c cpuemu6.c cpuemu7.c cpuemu8.c
 
-libocpuis_a_SOURCES = $(CORESRCS) readcpu.c newcpu.c missing.c support.c \
+libocpuis_la_SOURCES = $(CORESRCS) readcpu.c newcpu.c missing.c support.c \
 	fpp.c cpudefs.c cpustbl.c custom.c init.c memory.c
 
 include_HEADERS = ocpuis.h

@@ -1,3 +1,10 @@
+1999-11-05  Christer Gustavsson  <cg@nocrew.org>
+
+	* Changed package to generate a shared library.
+
+	* Made CPUsubroutine, a function that executes a subroutine of
+	m68k code.
+
 1999-10-11  Christer Gustavsson  <cg@nocrew.org>
 
 	* Made auto{make,conf} files for the package

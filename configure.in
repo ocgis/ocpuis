@@ -11,6 +11,7 @@ dnl Checks for programs.
 AC_PROG_CC
 AC_ARG_PROGRAM
 AC_PROG_INSTALL
+AM_PROG_LIBTOOL
 
 dnl Use this instead of AC_PROG_RANLIB because
 dnl this works with cross-compiling.
