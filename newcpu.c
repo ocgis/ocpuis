@@ -1162,7 +1162,9 @@ unsigned long REGPARAM2 op_illg (uae_u32 opcode)
 	    /* Calltrap. */
 	    call_calltrap (opcode & 0xFFF);
 	}
-	Exception(0xA,0);
+        m68k_incpc(2);
+	Exception(0xA, pc);
+
 	return 4;
     }
 #if 0
