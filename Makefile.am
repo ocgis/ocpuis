@@ -15,7 +15,7 @@ gencpu_SOURCES = gencpu.c readcpu.c cpudefs.c missing.c
 
 sampleprog_SOURCES = sampleprog.c
 
-sampleprog_LDADD = ./libocpuis.a
+sampleprog_LDADD = ./libocpuis.la
 
 cpudefs.c: build68k table68k
 	./build68k < table68k >cpudefs.c
