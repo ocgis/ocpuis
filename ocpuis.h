@@ -11,12 +11,23 @@ typedef struct sCPU {
 
   /* Initialisation */
 
-  CPUaddr init_pc;
-  CPUaddr init_msp, init_usp, init_isp;
-  CPUword init_sr;
+  CPUaddr init_pc;      /* Program counter
+			 * Execution will start here
+			 * upon CPUrun().
+			 */
 
-  CPUlong init_dreg[8];
-  CPUlong init_areg[8];
+  CPUword init_sr;      /* Status register */
+
+  /* Note: the thing commonly known as SP is
+   *       really Areg[7]
+   */
+
+  CPUaddr init_msp;     /* Master SP */
+  CPUaddr init_usp;     /* User SP */
+  CPUaddr init_isp;     /* Interrupt SP */
+
+  CPUlong init_dreg[8]; /* Data registers */
+  CPUlong init_areg[8]; /* Address registers */
   
   /* Memory handling */
 
@@ -39,9 +50,39 @@ typedef struct sCPU {
 
 /* Regular functions */
 
+/* 
+ * CPUtemplate:
+ * 
+ * Creates an empty (zeroed) entry
+ * of the struct above and returns it.
+ */
+
 CPU *CPUtemplate(void);
+
+/* 
+ * CPUsimple_template:
+ * 
+ * Similar to CPUtemplate() but also
+ * sets PC, SP (A7) and SR before
+ * returning the struct.
+ */
+
 CPU *CPUsimple_template(CPUaddr pc, CPUaddr sp, CPUword sr);
+
+/*
+ * CPUinit:
+ *
+ * Initialises the CPU core, in a very non-reentrant manner.
+ * Fills the internal structures with the values specified
+ * in the CPU struct.
+
 int CPUinit(CPU *data);
+
+/*
+ * CPUrun:
+ *
+ * Begin execution.
+
 int CPUrun(void);
 
 /* Retrieving and setting special data */

@@ -25,7 +25,7 @@ install: $(STLIBNAME) $(HEADER)
 
 clean:
 	-rm -f $(OBJS) *~ *.o main build68k gencpu $(STLIBNAME)
-	-rm -f $(CORESRCS) cpustbl.c cputbl.h cpudefs.c
+	-rm -f $(CORESRCS) cpustbl.c cputbl.h cpudefs.c sampleprog
 
 build68k: build68k.o
 	$(CC) $(LDFLAGS) -o build68k build68k.o
@@ -60,8 +60,8 @@ support.o: m68k.h
 memory.o: ocpuis.h memory.h
 init.o: ocpuis.h
 
-main: main.o $(OBJS) $(COREOBJS)
-	$(CC) $(CFLAGS) -o $@ main.o $(OBJS) $(COREOBJS) $(LIBS)
+sampleprog: sampleprog.o $(STLIBNAME) $(HEADER)
+	$(CC) $(CFLAGS) -o $@ sampleprog.o -L. -locpuis -lm
 
 $(STLIBNAME): $(OBJS) $(COREOBJS)
 	$(AR) $(ARFLAGS) $(STLIBNAME) $(OBJS) $(COREOBJS)
