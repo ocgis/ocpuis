@@ -8,6 +8,7 @@
 
 static __inline__ uae_u32 do_get_mem_long(uae_u32 *a)
 {
+    
     return *a;
 }
 
