@@ -1444,6 +1444,21 @@ CPUexception(int nr)
   return 0;
 }
 
+/*
+** Description
+** Perform a nop.
+**
+** Do nothing, update the 
+** cycle counter and jump
+** to the event handler
+*/
+int
+CPUnop(int cntadd)
+{
+  do_cycles(cntadd);
+  return 0;
+}
+
 static void m68k_verify (uaecptr addr, uaecptr *nextpc)
 {
     uae_u32 opcode, val;

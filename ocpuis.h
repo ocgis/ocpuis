@@ -107,6 +107,16 @@ int CPUsubroutine(CPUaddr new_pc);
 
 int CPUexception(int nr);
 
+/*
+ * CPUexception
+ *
+ * Do nothing, update the
+ * cycle counter, and jump
+ * to the event handler.
+ */
+
+int CPUnop(int cntadd);
+
 /* Retrieving and setting special data */
 
 CPUaddr CPUget_pc(void);
