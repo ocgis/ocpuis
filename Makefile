@@ -2,18 +2,23 @@
 # Makefile.in for UAE
 #
 
+CC=gcc
+AR=ar
+ARFLAGS=rcs
+
 OBJS = readcpu.o newcpu.o missing.o support.o fpp.o cpudefs.o cpustbl.o custom.o init.o memory.o
-LIBS = -lm
+# LIBS = -lm
 CORESRCS = cpuemu1.c cpuemu2.c cpuemu3.c cpuemu4.c cpuemu5.c cpuemu6.c cpuemu7.c cpuemu8.c
 COREOBJS = cpuemu1.o cpuemu2.o cpuemu3.o cpuemu4.o cpuemu5.o cpuemu6.o cpuemu7.o cpuemu8.o
 
 CFLAGS=-g
+LDFLAGS=
+LIBNAME=libocpuis
 
-
-all: main
+all: $(LIBNAME).a
 
 clean:
-	-rm -f $(OBJS) *~ *.o main build68k gencpu 
+	-rm -f $(OBJS) *~ *.o main build68k gencpu $(LIBNAME).a
 	-rm -f $(CORESRCS) cpustbl.c cputbl.h cpudefs.c
 
 build68k: build68k.o
@@ -52,3 +57,5 @@ init.o: ocpuis.h
 main: main.o $(OBJS) $(COREOBJS)
 	$(CC) $(CFLAGS) -o $@ main.o $(OBJS) $(COREOBJS) $(LIBS)
 
+$(LIBNAME).a: $(OBJS) $(COREOBJS)
+	$(AR) $(ARFLAGS) $(LIBNAME).a $(OBJS) $(COREOBJS)
