@@ -51,3 +51,8 @@ void CPUset_func_handle_exception(void (*func)(int, CPUaddr))
   memory.handle_exception = func;
 }
 
+void CPUset_func_handle_event(void (*func)(unsigned long))
+{
+  memory.handle_event = func;
+}
+

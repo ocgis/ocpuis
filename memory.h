@@ -22,6 +22,7 @@ extern struct sMem {
   void *(*real_addr) (CPUaddr addr);
   int (*valid_addr) (CPUaddr addr, CPUlong size);
   void (*handle_exception) (int, CPUaddr);
+  void (*handle_event) (unsigned long);
 
 } memory;
 
@@ -68,6 +69,11 @@ static __inline__ void handle_exception(int nr, CPUaddr oldpc)
     memory.handle_exception(nr, oldpc);
 }
 
+static __inline__ void handle_event(int cyclecnt)
+{
+    memory.handle_event(cyclecnt);
+}
+
 void CPUset_func_get_byte(CPUbyte (*)(CPUaddr));
 void CPUset_func_get_word(CPUword (*)(CPUaddr));
 void CPUset_func_get_long(CPUlong (*)(CPUaddr));
@@ -77,3 +83,4 @@ void CPUset_func_put_long(void (*)(CPUaddr, CPUlong));
 void CPUset_func_real_addr(void *(*)(CPUaddr));
 void CPUset_func_valid_addr(int (*)(CPUaddr, CPUlong));
 void CPUset_func_handle_exception(void (*)(int, CPUaddr));
+void CPUset_func_handle_event(void (*)(unsigned long));

@@ -2,6 +2,7 @@
 #include "sysdeps.h"
 
 uae_u16 intena,intreq;
+unsigned long cycles;
 
 int intlev (void)
 {

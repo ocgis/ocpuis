@@ -11,11 +11,11 @@
 
 #include "config.h"
 #include "options.h"
-#include "events.h"
 #include "uae.h"
-#include "memory.h"
 #include "custom.h"
 #include "readcpu.h"
+#include "memory.h"
+#include "events.h"
 #include "newcpu.h"
 //#include "autoconf.h"
 //#include "ersatz.h"

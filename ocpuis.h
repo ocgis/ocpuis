@@ -45,6 +45,7 @@ typedef struct sCPU {
   /* Exception handling */
 
   void (*handle_exception) (int nr, CPUaddr oldpc);
+  void (*handle_event) (unsigned long cyclecnt);
 
 } CPU;
 

@@ -6,6 +6,7 @@
 #include "readcpu.h"
 #include "options.h"
 #include "memory.h"
+#include "events.h"
 #include "newcpu.h"
 
 CPU *CPUtemplate(void)
@@ -102,6 +103,12 @@ int CPUinit(CPU *data)
   }
   CPUset_func_handle_exception(data->handle_exception);
   
+  if(!data->handle_event) {
+    free(data);
+    return -10;
+  }
+  CPUset_func_handle_event(data->handle_event);
+  
   CPUset_pc(data->init_pc);
   CPUset_msp(data->init_msp);
   CPUset_isp(data->init_isp);
@@ -188,5 +195,15 @@ void CPUset_areg(int r, CPUlong value)
 CPUlong CPUget_areg(int r)
 {
   return m68k_areg(regs, r);
+}
+
+void CPUset_cyclecnt(unsigned long value)
+{
+  cycles = value;
+}
+
+unsigned long CPUget_cyclecnt(void)
+{
+  return cycles;
 }
 
