@@ -27,6 +27,7 @@ CPU *CPUsimple_template(CPUaddr pc, CPUaddr sp, CPUword sr)
     return NULL;
 
   tpl->init_areg[7] = sp;
+  tpl->init_isp = sp;
   tpl->init_pc = pc;
   tpl->init_sr = sr;
   
@@ -135,6 +136,7 @@ void CPUset_sr(CPUword sr)
 
 CPUword CPUget_sr(void)
 {
+  MakeSR();
   return regs.sr;
 }
 
