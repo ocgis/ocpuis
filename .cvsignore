@@ -1,0 +1,15 @@
+.deps
+Makefile.in
+aclocal.m4
+build68k
+config.cache
+config.h.in
+config.log
+config.status
+configure
+cpudefs.c
+cpuemu[1-8].c
+cpustbl.c
+cputbl.h
+gencpu
+sampleprog

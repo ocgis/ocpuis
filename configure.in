@@ -1,0 +1,35 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(build68k.c)
+
+PACKAGE=ocpuis
+VERSION=0.0.0
+
+dnl Initialize automake macros
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_ARG_PROGRAM
+AC_PROG_INSTALL
+
+dnl Use this instead of AC_PROG_RANLIB because
+dnl this works with cross-compiling.
+AC_CHECK_TOOL(RANLIB, ranlib, :)
+
+dnl Checks for libraries.
+AC_CHECK_LIB(m, main)
+
+dnl Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/time.h unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+
+dnl Checks for library functions.
+AC_FUNC_MEMCMP
+AC_CHECK_FUNCS(mkdir strstr)
+
+AC_OUTPUT(Makefile)
