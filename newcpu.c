@@ -1280,39 +1280,55 @@ static int do_specialties (void)
     return 0;
 }
 
-static void m68k_run_1 (void)
-{
-    for (;;) {
-	int cycles;
-	uae_u32 opcode;
-	opcode = GET_OPCODE;
-#if 0
-	fprintf(stderr, "executing opcode: %04x at 0x%08x\n", opcode, m68k_getpc());
-	if (get_ilong (0) != do_get_mem_long (&regs.prefetch)) {
-	    debugging = 1;
-	    return;
-	}
-#endif
-	/* assert (!regs.stopped && !(regs.spcflags & SPCFLAG_STOP)); */
-/*	regs_backup[backup_pointer = (backup_pointer + 1) % 16] = regs;*/
-#if COUNT_INSTRS == 2
-	if (table68k[cft_map (opcode)].handler != -1)
-	    instrcount[table68k[cft_map (opcode)].handler]++;
-#elif COUNT_INSTRS == 1
-	instrcount[opcode]++;
-#endif
-	cycles = (*cpufunctbl[opcode])(opcode);
 
-	/*n_insns++;*/
-	cycles &= cycles_mask;
-	cycles |= cycles_val;
-	do_cycles (cycles);
-	if (regs.spcflags) {
-	    if (do_specialties ())
-		return;
-	}
-    }
+/*
+** Description
+** Execute one m68k instruction
+*/
+static
+inline
+int
+execute_one_instruction(void)
+{
+  int cycles;
+  uae_u32 opcode;
+  opcode = GET_OPCODE;
+  
+#if 0
+  fprintf(stderr, "executing opcode: %04x at 0x%08x\n", opcode, m68k_getpc());
+  m68k_dumpstate(NULL);
+#endif
+
+  /* assert (!regs.stopped && !(regs.spcflags & SPCFLAG_STOP)); */
+  /*	regs_backup[backup_pointer = (backup_pointer + 1) % 16] = regs;*/
+#if COUNT_INSTRS == 2
+  if (table68k[cft_map (opcode)].handler != -1)
+    instrcount[table68k[cft_map (opcode)].handler]++;
+#elif COUNT_INSTRS == 1
+  instrcount[opcode]++;
+#endif
+  cycles = (*cpufunctbl[opcode])(opcode);
+  
+  /*n_insns++;*/
+  cycles &= cycles_mask;
+  cycles |= cycles_val;
+  do_cycles (cycles);
+  if (regs.spcflags) {
+    if (do_specialties ())
+      return 0;
+  }
+  
+  return 1;
 }
+
+
+static
+void
+m68k_run_1(void)
+{
+  while(execute_one_instruction());
+}
+
 
 #ifdef X86_ASSEMBLY
 static __inline__ void m68k_run1 (void)
@@ -1379,8 +1395,7 @@ CPUsubroutine(CPUaddr new_pc)
     {
       break;
     }
-    
-    m68k_run1();
+    execute_one_instruction();
   }
 
   m68k_setpc(old_pc);
