@@ -2471,6 +2471,7 @@ static void generate_one_opcode (int rp)
 static void generate_func (void)
 {
     int i, j, rp;
+    static char cpufile[11]="cpuemuX.c\0";
 
     using_prefetch = 0;
     using_exception_3 = 0;
@@ -2486,30 +2487,17 @@ static void generate_func (void)
 	postfix = i;
 	fprintf (stblfile, "struct cputbl op_smalltbl_%d[] = {\n", postfix);
 
-	/* sam: this is for people with low memory (eg. me :)) */
-	printf ("\n"
-                "#if !defined(PART_1) && !defined(PART_2) && "
-	 	    "!defined(PART_3) && !defined(PART_4) && "
-		    "!defined(PART_5) && !defined(PART_6) && "
-		    "!defined(PART_7) && !defined(PART_8)"
-		"\n"
-	        "#define PART_1 1\n"
-	        "#define PART_2 1\n"
-	        "#define PART_3 1\n"
-	        "#define PART_4 1\n"
-	        "#define PART_5 1\n"
-	        "#define PART_6 1\n"
-	        "#define PART_7 1\n"
-	        "#define PART_8 1\n"
-	        "#endif\n\n");
-	
 	rp = 0;
 	for(j=1;j<=8;++j) {
 		int k = (j*nr_cpuop_funcs)/8;
-		printf ("#ifdef PART_%d\n",j);
+		cpufile[6]='0'+j;
+		if(postfix == 0) {
+		  freopen(cpufile, "wb", stdout);
+		  generate_includes (stdout);
+		} else
+		  freopen(cpufile, "ab", stdout);
 		for (; rp < k; rp++)
 		   generate_one_opcode (rp);
-		printf ("#endif\n\n");
 	}
 
 	fprintf (stblfile, "{ 0, 0, 0 }};\n");
@@ -2534,9 +2522,11 @@ int main (int argc, char **argv)
 
     headerfile = fopen ("cputbl.h", "wb");
     stblfile = fopen ("cpustbl.c", "wb");
+#if 0
     freopen ("cpuemu.c", "wb", stdout);
 
     generate_includes (stdout);
+#endif
     generate_includes (stblfile);
 
     generate_func ();
