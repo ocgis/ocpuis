@@ -693,6 +693,8 @@ void MakeFromSR (void)
 
 void Exception(int nr, uaecptr oldpc)
 {
+    int cycles;
+
     compiler_flush_jsr_stack();
     MakeSR();
     if (!regs.s) {
@@ -760,10 +762,11 @@ kludge_me_do:
     m68k_setpc (get_long (regs.vbr + 4*nr));
 #endif
     /* Unsure how to deal with this in a nice way */
-
     handle_exception(nr, oldpc);
 
-    
+    /* Execute an RTE instruction */
+    cycles = (*cpufunctbl[0x4e73])(0x4e73);
+    do_cycles(cycles);  
 
     fill_prefetch_0 ();
     regs.t1 = regs.t0 = regs.m = 0;
