@@ -20,10 +20,5 @@ sampleprog_LDADD = ./libocpuis.la
 cpudefs.c: build68k table68k
 	./build68k < table68k >cpudefs.c
 
-$(CORESRCS) cpustbl.c cpustbl.h: gencpu
+$(CORESRCS) cpustbl.c cputbl.h: gencpu
 	./gencpu
-
-# gencpu also creates cpustbl.c and cputbl.h
-cpustbl.c: $(CORESRCS)
-cputbl.h: $(CORESRCS)
-
